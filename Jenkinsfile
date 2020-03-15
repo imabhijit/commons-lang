@@ -9,7 +9,7 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh 'mvn test'
+        sh 'mvn test -Drat.numUnapprovedLicenses=15'
       }
     }
 
@@ -17,7 +17,7 @@ pipeline {
   post {
     failure {
       sh "git bisect start ${BROKEN} ${STABLE}"
-      sh 'git bisect run mvn clean test'
+      sh 'git bisect run mvn clean test -Drat.numUnapprovedLicenses=15'
       sh 'git bisect reset'
     }
 
